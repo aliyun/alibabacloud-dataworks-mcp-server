@@ -1,0 +1,76 @@
+{
+  "name": "alibabacloud-dataworks-mcp-server",
+  "version": "1.0.0",
+  "description": "DataWorks MCP Server: Export the DataWorks Open API to MCP Server, allowing clients that can run MCP Server to use DataWorks Open API through AI.",
+  "main": "build/index.js",
+  "module": "build/index.js",
+  "type": "module",
+  "bin": {
+    "alibabacloud-dataworks-mcp-server": "./build/index.js"
+  },
+  "scripts": {
+    "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
+    "start": "REGION=cn-shanghai node build/index.js",
+    "dev": "pnpm run build; npx @modelcontextprotocol/inspector -e NODE_ENV=development -e REGION=cn-shanghai -e ALIBABA_CLOUD_ACCESS_KEY_ID=your_aliyun_key_id -e ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_aliyun_key_secret node build/index.js",
+    "restart": "pnpm run build; REGION=cn-shanghai node build/index.js"
+  },
+  "files": [
+    "build"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:aliyun/alibabacloud-dataworks-mcp-server.git"
+  },
+  "keywords": [
+    "alibaba",
+    "aliyun",
+    "cloud",
+    "computing",
+    "dataworks",
+    "big data",
+    "mcp",
+    "ai",
+    "open api",
+    "dataworks-mcp"
+  ],
+  "author": "DataWorks",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@alicloud/credentials": "^2.4.0",
+    "@alicloud/dataworks-public20240518": "^6.0.2",
+    "@alicloud/openapi-client": "^0.4.13",
+    "@alicloud/openapi-util": "^0.3.2",
+    "@alicloud/tea-typescript": "^1.8.0",
+    "@alicloud/tea-util": "^1.4.10",
+    "@modelcontextprotocol/sdk": "^1.5.0",
+    "dotenv": "^16.4.7",
+    "express": "4.17.1",
+    "lodash": "^4.17.21",
+    "node-fetch": "3.3.2",
+    "openai": "^4.77.0",
+    "path": "^0.12.7",
+    "uuid": "9.0.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "@modelcontextprotocol/inspector": "^0.6.0",
+    "@types/lodash": "^4.17.16",
+    "@types/node": "^22.13.4",
+    "tailwindcss": "^3.0.0",
+    "typescript": "^5.7.3"
+  },
+  "packageManager": "pnpm@9.14.2",
+  "publishConfig": {
+    "registry": "https://registry.anpm.alibaba-inc.com"
+  },
+  "homepage": "https://github.com/aliyun/alibabacloud-dataworks-mcp-server.git",
+  "bugs": {
+    "url": "https://github.com/aliyun/alibabacloud-dataworks-mcp-server/issues",
+    "mail": ""
+  },
+  "tnpm": {
+    "lockfile": "enable",
+    "mode": "npm"
+  }
+}
