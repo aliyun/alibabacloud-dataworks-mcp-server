@@ -89,7 +89,7 @@ If you built from source (Option 2):
         "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
         "NODE_ENV": "development_or_product"
       },
-      "disabled": true,
+      "disabled": false,
       "autoApprove": []
     }
   }
