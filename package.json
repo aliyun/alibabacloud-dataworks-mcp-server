@@ -5,6 +5,7 @@
   "main": "build/index.js",
   "module": "build/index.js",
   "type": "module",
+  "icon": "icon.png",
   "bin": {
     "alibabacloud-dataworks-mcp-server": "./build/index.js"
   },
