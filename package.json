@@ -62,7 +62,7 @@
   },
   "packageManager": "pnpm@9.14.2",
   "publishConfig": {
-    "registry": "https://registry.anpm.alibaba-inc.com"
+    "registry": "https://registry.npmjs.org"
   },
   "homepage": "https://github.com/aliyun/alibabacloud-dataworks-mcp-server.git",
   "bugs": {
