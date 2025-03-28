@@ -20,25 +20,12 @@ class OpenApiClient {
             });
         }
         else {
-            const credentialsURI = process.env.ALIBABA_CLOUD_CREDENTIALS_URI;
             // 参考 https://help.aliyun.com/zh/sdk/developer-reference/v2-manage-node-js-access-credentials
-            if (credentialsURI) {
-                // 方式一 使用 url 获取凭证
-                const credentialClient = new Credential.default({
-                    type: 'credentials_uri',
-                    credentialsURI,
-                });
-                apiConfig = new OpenApi.Config();
-                // 使用Credentials配置凭证。
-                apiConfig.credential = credentialClient;
-            }
-            else {
-                // 方式二 使用默认凭证初始化Credentials Client
-                const credentialClient = new Credential.default();
-                apiConfig = new OpenApi.Config();
-                // 使用Credentials配置凭证。
-                apiConfig.credential = credentialClient;
-            }
+            // 使用默认凭证初始化Credentials Client，
+            const credentialClient = new Credential.default();
+            apiConfig = new OpenApi.Config();
+            // 使用Credentials配置凭证。@alicloud/credentials 2.4.2 已支持 credentialsURI
+            apiConfig.credential = credentialClient;
         }
         // Endpoint 请参考 https://api.aliyun.com/product/dataworks-public https://api.aliyun.com/product/CloudAPI
         apiConfig.endpoint = `dataworks.${regionId ? `${regionId}.` : ''}aliyuncs.com`;
