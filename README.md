@@ -87,7 +87,8 @@ If you built from source (Option 2):
         "REGION": "your_dataworks_open_api_region_id_here",
         "ALIBABA_CLOUD_ACCESS_KEY_ID": "your_alibaba_cloud_access_key_id",
         "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
-        "NODE_ENV": "development_or_product"
+        "NODE_ENV": "development_or_product",
+        "VERBOSE": "true"
       },
       "disabled": false,
       "autoApprove": []

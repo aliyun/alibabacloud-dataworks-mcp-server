@@ -37,7 +37,7 @@ export function createMcpServer(
       paramsSchema = result;
     }
 
-    console.log(paramsSchema);
+    console.log('active tool', action.name);
 
     server.tool(
       action.name,

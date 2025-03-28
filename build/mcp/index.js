@@ -23,7 +23,7 @@ export function createMcpServer(actions, agent, dataWorksOpenApis, options) {
             const { result = {} } = zodToMCPShape(convertInputSchemaToSchema(action?.inputSchema));
             paramsSchema = result;
         }
-        console.log(paramsSchema);
+        console.log('active tool', action.name);
         server.tool(action.name, action.description || '', paramsSchema, async (params) => {
             try {
                 // Execute the action handler with the params directly

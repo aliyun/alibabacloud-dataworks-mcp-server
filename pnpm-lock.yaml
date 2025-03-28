@@ -4,12 +4,15 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  '@alicloud/credentials': 2.4.2
+
 importers:
 
   .:
     dependencies:
       '@alicloud/credentials':
-        specifier: ^2.4.2
+        specifier: 2.4.2
         version: 2.4.2
       '@alicloud/dataworks-public20240518':
         specifier: ^6.0.2

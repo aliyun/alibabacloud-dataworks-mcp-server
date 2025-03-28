@@ -6,6 +6,7 @@ import Util from '@alicloud/tea-util';
 import tea from '@alicloud/tea-typescript';
 import { OpenApiClientInstance } from "../openApiClient/index.js";
 import { AlibabaCloudOpenApiInterface, ApiMethod, IAlibabaCloudOpenApiResponse } from '../types/apibabaCloudApi.js';
+import { isVerboseMode, getEnvInfo } from '../utils/common.js';
 
 /**
  * Get detailed and latest information about any topic using Perplexity AI.
@@ -94,7 +95,8 @@ async function callTool(
     return (res?.statusCode === 200 && res?.body) ? res?.body : res;
 
   } catch (error: any) {
-    throw new Error(`Call tool failed: ${error.message}, api key: ${apiKey}, api request configs: ${JSON.stringify(apiRequestConfigs)}, query: ${JSON.stringify(query)}, body: ${JSON.stringify(body)}`);
+    const verbose = isVerboseMode();
+    throw new Error(`Call tool failed: ${error.message}, api key: ${apiKey}, api request configs: ${JSON.stringify(apiRequestConfigs)}, query: ${JSON.stringify(query)}, body: ${JSON.stringify(body)}${verbose ? `, env info: ${getEnvInfo()}` : ''}`);
   }
 };
 

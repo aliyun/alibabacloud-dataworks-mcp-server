@@ -3,6 +3,7 @@ import Credential from '@alicloud/credentials';
 import Util from '@alicloud/tea-util';
 import tea from '@alicloud/tea-typescript';
 import typeClient from '@alicloud/openapi-client';
+import { getEnvInfo, isVerboseMode } from '../utils/common.js';
 
 type Error = { message: string; };
 
@@ -54,6 +55,12 @@ class OpenApiClient {
     // 使用特定方式调用
     // import DataWorksPublic20240518 from '@alicloud/dataworks-public20240518';
     // return new DataWorksPublic20240518.default(apiConfig);
+
+    const verbose = isVerboseMode();
+    if (verbose) {
+      console.debug('apiConfig endpoint', apiConfig.endpoint);
+      console.debug('env info', getEnvInfo());
+    }
 
     // 使用泛化方式调用
     // https://help.aliyun.com/zh/sdk/developer-reference/generalized-call-node-js

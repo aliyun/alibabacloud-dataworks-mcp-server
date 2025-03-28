@@ -2,6 +2,7 @@
 // import * as DataWorksPublic20240518Classes from '@alicloud/dataworks-public20240518';
 import OpenApi from '@alicloud/openapi-client';
 import Util from '@alicloud/tea-util';
+import { isVerboseMode, getEnvInfo } from '../utils/common.js';
 /**
  * Get detailed and latest information about any topic using Perplexity AI.
  * @param agent Aliyun Open API instance
@@ -76,7 +77,8 @@ async function callTool(agent, apiKey, input, dataWorksOpenApis) {
         return (res?.statusCode === 200 && res?.body) ? res?.body : res;
     }
     catch (error) {
-        throw new Error(`Call tool failed: ${error.message}, api key: ${apiKey}, api request configs: ${JSON.stringify(apiRequestConfigs)}, query: ${JSON.stringify(query)}, body: ${JSON.stringify(body)}`);
+        const verbose = isVerboseMode();
+        throw new Error(`Call tool failed: ${error.message}, api key: ${apiKey}, api request configs: ${JSON.stringify(apiRequestConfigs)}, query: ${JSON.stringify(query)}, body: ${JSON.stringify(body)}${verbose ? `, env info: ${getEnvInfo()}` : ''}`);
     }
 }
 ;
