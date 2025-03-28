@@ -1,6 +1,6 @@
 {
   "name": "alibabacloud-dataworks-mcp-server",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "DataWorks MCP Server: Export the DataWorks Open API to MCP Server, allowing clients that can run MCP Server to use DataWorks Open API through AI.",
   "main": "build/index.js",
   "module": "build/index.js",
@@ -37,7 +37,7 @@
   "author": "DataWorks",
   "license": "Apache-2.0",
   "dependencies": {
-    "@alicloud/credentials": "^2.4.0",
+    "@alicloud/credentials": "^2.4.2",
     "@alicloud/dataworks-public20240518": "^6.0.2",
     "@alicloud/openapi-client": "^0.4.13",
     "@alicloud/openapi-util": "^0.3.2",
