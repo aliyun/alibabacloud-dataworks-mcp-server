@@ -13,9 +13,7 @@ dotenv.config();
 
 // Validate required environment variables
 function validateEnvironment() {
-  const requiredEnvVars = {
-    'REGION': process.env.REGION,
-  };
+  const requiredEnvVars = {};
 
   const missingVars = Object.entries(requiredEnvVars)
     .filter(([_, value]) => !value)
