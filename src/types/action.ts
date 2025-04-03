@@ -1,6 +1,6 @@
 import { OpenApiClientInstance } from "../openApiClient/index.js";
 import { z } from "zod";
-import { AlibabaCloudOpenApiInterface, ApiParameterSchema } from "./apibabaCloudApi.js";
+import { ApiMethodUpperCase, ApiParameter, ApiParameterSchema } from "./apibabaCloudApi.js";
 
 /**
  * Example of an action with input and output
@@ -17,7 +17,6 @@ export interface ActionExample {
 export type Handler = (
   agent: OpenApiClientInstance,
   input: Record<string, any>,
-  dataWorksOpenApis: AlibabaCloudOpenApiInterface,
 ) => Promise<Record<string, any>>;
 
 export interface DwInputSchema extends Omit<ApiParameterSchema, 'required' | 'properties' | 'items'> {
@@ -49,6 +48,18 @@ export interface ActionTool {
    */
   inputSchema?: DwInputSchema;
 
+  annotations?: {
+    path?: string;
+    method?: ApiMethodUpperCase;
+    /** ex 2024-05-18 */
+    version?: string;
+    example?: string;
+    category?: string;
+    pmd: {
+      [name: string]: ApiParameter;
+    };
+  };
+
   // --------------- 以下为扩展 -----------------
 
   /**
@@ -71,4 +82,9 @@ export interface ActionTool {
    * Function that executes the action
    */
   handler?: Handler;
+
+  /**
+   * 有对应的 MCP Resource
+   */
+  hasMcpResource?: boolean;
 }

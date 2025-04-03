@@ -3,7 +3,7 @@ import Credential from '@alicloud/credentials';
 import Util from '@alicloud/tea-util';
 import tea from '@alicloud/tea-typescript';
 import typeClient from '@alicloud/openapi-client';
-import { getEnvInfo, isVerboseMode } from '../utils/common.js';
+import { getEnvInfo, getEnvRegion, isPreMode, isVerboseMode } from '../utils/common.js';
 
 type Error = { message: string; };
 
@@ -28,7 +28,7 @@ class OpenApiClient {
     let apiConfig: OpenApi.Config;
 
     // 先拿参数的 region 再判断 DATAWORKS_REGION 跟 REGION
-    const regionId = config?.REGION || process.env.DATAWORKS_REGION || process.env.REGION || "";
+    const regionId = config?.REGION || getEnvRegion();
 
     if (config?.ALIBABA_CLOUD_ACCESS_KEY_ID) {
       // please use security sts way to auth: https://help.aliyun.com/document_detail/378664.html
@@ -49,8 +49,12 @@ class OpenApiClient {
       apiConfig.credential = credentialClient;
     }
 
+    const isPre = isPreMode();
+
     // Endpoint 请参考 https://api.aliyun.com/product/dataworks-public https://api.aliyun.com/product/CloudAPI
-    apiConfig.endpoint = `dataworks.${regionId ? `${regionId}.` : ''}aliyuncs.com`;
+    const endpoint = process.env.OPEN_API_ENDPOINT || (`dataworks${isPre ? '-pre' : ''}.${regionId ? `${regionId}.` : ''}aliyuncs.com`);
+    apiConfig.endpoint = endpoint;
+
 
     // 使用特定方式调用
     // import DataWorksPublic20240518 from '@alicloud/dataworks-public20240518';

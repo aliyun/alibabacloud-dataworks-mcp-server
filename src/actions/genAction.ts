@@ -1,9 +1,11 @@
 
 import OpenApiClientInstance from "../openApiClient/index.js";
-import genTool from "../tools/callTool.js";
-import { ActionTool, ActionExample, DwInputSchema } from "../types/action.js";
+import callTool from "../tools/callTool.js";
+import { ActionTool, ActionExample } from "../types/action.js";
 import { z } from "zod";
-import { AlibabaCloudOpenApiInterface, ApiObj, ApiParameterSchema } from "../types/apibabaCloudApi.js";
+import { ApiMethod, ApiObj, ApiParameter, ApiParameterSchema } from "../types/apibabaCloudApi.js";
+import { defaultDataWorksAliyunOpenApiVersion } from "../constants/index.js";
+import { toJSONString } from "../utils/common.js";
 
 interface ExampleInput { [name: string]: any };
 
@@ -13,10 +15,10 @@ interface Example {
   explanation?: string;
 }
 
-export const getHandler = (apiKey: string) => async (agent: OpenApiClientInstance, input: Record<string, any>, dataWorksOpenApis: AlibabaCloudOpenApiInterface) => {
+export const getHandler = (apiKey: string, actionTool: ActionTool) => async (agent: OpenApiClientInstance, input: Record<string, any>) => {
   try {
 
-    const response = await genTool(agent, apiKey, input, dataWorksOpenApis);
+    const response = await callTool(agent, apiKey, actionTool, input);
     return response;
 
   } catch (error: any) {
@@ -48,6 +50,9 @@ export const getZObjByType = (item?: ApiParameterSchema) => {
   const type = item?.type?.toLocaleLowerCase?.();
 
   if (type?.includes?.('int')) {
+    // obj = z.bigint();
+    obj = z.number();
+  } if (type?.includes?.('double') || type?.includes?.('float')) {
     obj = z.number();
   } else if (type?.includes?.('string')) {
     obj = z.string();
@@ -81,16 +86,19 @@ export const getZObjByType = (item?: ApiParameterSchema) => {
     } else obj = z.any();
 
   } else {
-    obj = z.string();
+    obj = z.any();
   }
 
   return obj;
 }
 
+/** 此方法是透过 open api 的对象转 Action */
 const genAction = (apiKey: string, api: ApiObj): ActionTool => {
 
   const input: ExampleInput = {};
   const schema: { [name: string]: any } = {};
+
+  const pmd: { [name: string]: ApiParameter } = {};
 
   api?.parameters?.forEach?.((param) => {
     const paramName = param?.name;
@@ -105,6 +113,7 @@ const genAction = (apiKey: string, api: ApiObj): ActionTool => {
         if (obj?.optional) obj = obj?.optional?.();
       }
       schema[paramName] = obj;
+      pmd[paramName] = { in: param?.in, style: param?.style };
     }
   });
 
@@ -116,24 +125,45 @@ const genAction = (apiKey: string, api: ApiObj): ActionTool => {
     if (response) {
       example.explanation = `status ${responseKey} input and response schema example`;
       example.input = input;
-      example.output = JSON.stringify(response?.schema || {});
+      example.output = toJSONString(response?.schema || {});
     }
     return example as ActionExample;
   });
 
-  return ({
+  const getMethod = (methods: ApiMethod[] = []) => {
+    if (methods?.includes?.('delete'))
+      return 'DELETE';
+    else if (methods?.includes?.('put'))
+      return 'PUT';
+    else if (methods?.includes?.('post'))
+      return 'POST';
+    else
+      return 'GET';
+  };
+
+  const annotations = {
+    path: '', // default 使用 RPC 没有 path
+    version: defaultDataWorksAliyunOpenApiVersion,
+    method: getMethod(api?.methods),
+    pmd,
+  };
+
+  const actionTool = ({
     name: apiKey,
     similes: [
       apiKey || '',
       api?.title || '',
-      // api?.description || '',
       api?.summary || '',
     ],
-    description: api?.summary || '',
+    description: api?.description || '',
     examples: [examples],
     schema: z.object(schema),
-    handler: getHandler(apiKey),
+    annotations,
   }) as ActionTool;
+
+  actionTool.handler = getHandler(apiKey, actionTool) as any;
+
+  return actionTool;
 };
 
 export default genAction;

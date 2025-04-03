@@ -1,6 +1,6 @@
 {
   "name": "alibabacloud-dataworks-mcp-server",
-  "version": "1.0.6",
+  "version": "1.0.30",
   "description": "DataWorks MCP Server: Export the DataWorks Open API to MCP Server, allowing clients that can run MCP Server to use DataWorks Open API through AI.",
   "main": "build/index.js",
   "module": "build/index.js",
@@ -11,9 +11,10 @@
   },
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
-    "start": "REGION=cn-shanghai node build/index.js",
+    "start": "pnpm run build; REGION=cn-shanghai node build/index.js",
     "dev": "pnpm run build; npx @modelcontextprotocol/inspector -e NODE_ENV=development -e REGION=cn-shanghai -e ALIBABA_CLOUD_ACCESS_KEY_ID=your_aliyun_key_id -e ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_aliyun_key_secret node build/index.js",
-    "restart": "pnpm run build; REGION=cn-shanghai node build/index.js"
+    "restart": "pnpm run build; REGION=cn-shanghai node build/index.js",
+    "pre-start": "pnpm run build; REGION=cn-shanghai NODE_ENV=development VERBOSE=true node build/index.js"
   },
   "files": [
     "build"
@@ -44,9 +45,13 @@
     "@alicloud/tea-typescript": "^1.8.0",
     "@alicloud/tea-util": "^1.4.10",
     "@modelcontextprotocol/sdk": "^1.5.0",
+    "@modelcontextprotocol/server-filesystem": "2025.3.28",
+    "bignumber.js": "^9.1.0",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "express": "4.17.1",
     "lodash": "^4.17.21",
+    "lossless-json": "^4.0.2",
     "node-fetch": "3.3.2",
     "openai": "^4.77.0",
     "path": "^0.12.7",
@@ -56,6 +61,7 @@
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "@modelcontextprotocol/inspector": "^0.6.0",
+    "@types/bignumber.js": "^5.0.4",
     "@types/lodash": "^4.17.16",
     "@types/node": "^22.13.4",
     "tailwindcss": "^3.0.0",

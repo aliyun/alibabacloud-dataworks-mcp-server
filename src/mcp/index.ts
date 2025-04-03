@@ -1,3 +1,4 @@
+import isString from 'lodash/isString.js';
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { z } from "zod";
@@ -5,7 +6,8 @@ import { OpenApiClientInstance } from "../openApiClient/index.js";
 import { MCPSchemaShape, zodToMCPShape } from "../utils/zodToMCPSchema.js";
 import type { ActionExample, ActionTool } from "../types/action.js";
 import { convertInputSchemaToSchema } from "../utils/initDataWorksTools.js";
-import { AlibabaCloudOpenApiInterface } from "../types/apibabaCloudApi.js";
+import { ServerOptions } from "@modelcontextprotocol/sdk/server/index.js";
+import { getMcpResourceName, toJSONString } from "../utils/common.js";
 
 /**
  * Creates an MCP server from a set of actions
@@ -13,17 +15,20 @@ import { AlibabaCloudOpenApiInterface } from "../types/apibabaCloudApi.js";
 export function createMcpServer(
   actions: Record<string, ActionTool>,
   agent: OpenApiClientInstance,
-  dataWorksOpenApis: AlibabaCloudOpenApiInterface,
   options: {
     name: string;
     version: string;
+    serverOptions?: ServerOptions;
   }
 ) {
+
+  const serverOptions: ServerOptions = options?.serverOptions || {};
+
   // Create MCP server instance
-  const server = new McpServer({
+  const serverWrapper = new McpServer({
     name: options.name,
     version: options.version,
-  });
+  }, serverOptions);
 
   // Convert each action to an MCP tool
   for (const [key, action] of Object.entries(actions)) {
@@ -37,23 +42,30 @@ export function createMcpServer(
       paramsSchema = result;
     }
 
-    console.log('active tool', action.name);
+    console.log('Active tool', action.name);
 
-    server.tool(
+    let actionDescription = action.description || '';
+
+    // 如果有对应的 MCP Resource，需要放在 description 给模型提示
+    if (action.hasMcpResource) {
+      actionDescription += `\n*此Tool有MCP Resource，请查看${getMcpResourceName({ toolName: action.name })}(MCP Resource)获取更多使用此Tool的示例详情。`;
+    }
+
+    serverWrapper.tool(
       action.name,
-      action.description || '',
+      actionDescription,
       paramsSchema,
       async (params) => {
         try {
           // Execute the action handler with the params directly
-          const result = await action?.handler?.(agent, params, dataWorksOpenApis);
+          const result = await action?.handler?.(agent, params);
 
           // Format the result as MCP tool response
           return {
             content: [
               {
                 type: "text",
-                text: JSON.stringify(result, null, 2)
+                text: result ? (isString(result) ? result : toJSONString(result, null, 2)) : '',
               }
             ]
           };
@@ -75,7 +87,7 @@ export function createMcpServer(
 
     // Add examples as prompts if they exist
     if (action.examples && action.examples.length > 0) {
-      server.prompt(
+      serverWrapper.prompt(
         `${action.name}-examples`,
         {
           showIndex: z.string().optional().describe("Example index to show (number)")
@@ -89,8 +101,8 @@ export function createMcpServer(
 
           const exampleText = selectedExamples?.map((ex, idx) => `
 Example ${idx + 1}:
-Input: ${JSON.stringify(ex?.input, null, 2)}
-Output: ${JSON.stringify(ex?.output, null, 2)}
+Input: ${toJSONString(ex?.input, null, 2)}
+Output: ${toJSONString(ex?.output, null, 2)}
 Explanation: ${ex?.explanation}
             `)
             .join('\n');
@@ -111,7 +123,7 @@ Explanation: ${ex?.explanation}
     }
   }
 
-  return server;
+  return serverWrapper;
 }
 /**
  * Helper to start the MCP server with stdio transport
@@ -139,17 +151,25 @@ Explanation: ${ex?.explanation}
 export async function startMcpServer(
   actions: Record<string, ActionTool>,
   agent: OpenApiClientInstance,
-  dataWorksOpenApis: AlibabaCloudOpenApiInterface,
   options: {
     name: string;
     version: string;
+    serverOptions?: ServerOptions;
   }
 ) {
   try {
-    const server = createMcpServer(actions, agent, dataWorksOpenApis, options);
+    const serverWrapper = createMcpServer(actions, agent, options);
     const transport = new StdioServerTransport();
-    await server.connect(transport);
-    return server;
+    await serverWrapper.connect(transport);
+
+    if (process.env.LOGGING_LEVEL) {
+      serverWrapper?.server?.sendLoggingMessage?.({
+        level: process.env.LOGGING_LEVEL as any,
+        data: "Server started successfully",
+      });
+    }
+
+    return serverWrapper;
   } catch (error) {
     console.error("Error starting MCP server", error);
     throw error;

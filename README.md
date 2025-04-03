@@ -67,7 +67,8 @@ If you installed via npm (Option 1):
       "env": {
         "REGION": "your_dataworks_open_api_region_id_here",
         "ALIBABA_CLOUD_ACCESS_KEY_ID": "your_alibaba_cloud_access_key_id",
-        "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret"
+        "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
+        "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_UTILS"
       },
       "disabled": false,
       "autoApprove": []
@@ -87,8 +88,11 @@ If you built from source (Option 2):
         "REGION": "your_dataworks_open_api_region_id_here",
         "ALIBABA_CLOUD_ACCESS_KEY_ID": "your_alibaba_cloud_access_key_id",
         "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
-        "NODE_ENV": "development_or_product",
-        "VERBOSE": "true"
+        "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_UTILS",
+        "NODE_ENV": "optional_development_or_product",
+        "TOOL_FILE_URI":"if_NODE_ENV_is_development_then_the_tool_path_to_the_tool_file_uri",
+        "OPEN_API_ENDPOINT": "open_api_endpoint_here",
+        "VERBOSE": "export_more_logs_when_needed"
       },
       "disabled": false,
       "autoApprove": []
@@ -104,10 +108,30 @@ init variables in your environment:
 ```env
 # DataWorks Configuration
 REGION=your_dataworks_open_api_region_id_here
-NODE_ENV=development_or_product
 ALIBABA_CLOUD_ACCESS_KEY_ID=your_alibaba_cloud_access_key_id
 ALIBABA_CLOUD_ACCESS_KEY_SECRET＝your_alibaba_cloud_access_key_secret
+TOOL_CATEGORIES=optional_your_tool_categories_here_ex_UTILS
+NODE_ENV=development_or_product
+TOOL_FILE_URI=if_NODE_ENV_is_development_then_the_tool_path_to_the_tool_file_uri
+OPEN_API_ENDPOINT=open_api_endpoint_here
+VERBOSE=export_more_logs_when_needed
 ```
+
+### Configuration Description
+#### Required
+REGION: Open API 使用的地域，如 cn-shanghai、cn-beijing...
+ALIBABA_CLOUD_ACCESS_KEY_ID: 阿里云 AK ID，跟阿里云 AK Secret 匹配
+ALIBABA_CLOUD_ACCESS_KEY_SECRET: 阿里云 AK Secret，跟阿里云 AK ID 匹配
+ALIBABA_CLOUD_CREDENTIALS_URI: DataWorks 个人开发环境使用的认证方式，透过接口获取临时 AK，如果填了上面的 AK ID 与 AK Secret，就不用填这项。
+
+#### Optional
+NODE_ENV: development 或 product，当设定为 development 时，DataWorks MCP Tool 列表接口会带上 pre- ，如此链接，Open API endpoint 会带上 pre-。
+OPEN_API_ENDPOINT: 更改 Open API 打的 endpoint，如"dataworks.cn-shanghai.aliyuncs.com"。
+TOOL_FILE_URI：DataWorks MCP Tool 列表的获取地址，可指定一个 http 地址，没有 http 开头的话就会读本地路径，如 "/Users/xxx/Documents/dev-tools.json"。
+MCP_FILE_URI：DataWorks MCP 资源的获取地址，可指定一个 http 地址，没有 http 开头的话就会读本地路径，如 "/Users/xxx/Documents/mcp.json"。
+TOOL_CATEGORIES: Tool 分类的白名单，这边写 Open API 的分类，在此接口查看 Category，可多选，透过半符逗号分开，如 空间管理,运维中心,数据开发（新版）,UTILS。
+TOOL_NAMES: Tool 名字的白名单，这边写 Open API 的名字，可多选，透过半符逗号分开，如 CreateNode,UpdateNode。
+VERBOSE: true 或 false，当 API 报错时，会打印出环境变量。
 
 ## Project Structure
 

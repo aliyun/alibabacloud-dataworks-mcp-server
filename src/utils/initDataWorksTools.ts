@@ -1,7 +1,8 @@
 import { getHandler, getZObjByType } from '../actions/genAction.js';
 import { ActionTool, DwInputSchema } from '../types/action.js';
 import { z } from "zod";
-import { AlibabaCloudOpenApiInterface, ApiParameter } from '../types/apibabaCloudApi.js';
+import { ApiParameter, ApiParameterSchema } from '../types/apibabaCloudApi.js';
+import { DataWorksMCPResponse } from '../types/common.js';
 
 export const convertInputSchemaToSchema = (inputSchema?: DwInputSchema, apiParameters?: ApiParameter[]) => {
   const schema: { [name: string]: any } = {};
@@ -24,14 +25,10 @@ export const convertInputSchemaToSchema = (inputSchema?: DwInputSchema, apiParam
 
   propertyKeys?.forEach?.((pKey) => {
 
-    const propertyApiMeta = apiParameters?.find?.(p => p?.name === pKey);
-
     const info = inputSchema?.properties?.[pKey];
     const description = info?.description;
 
-    // let obj = getZObjByType(info as ApiParameterSchema);
-    // 用 open api 的信息来组织 schema
-    let obj = getZObjByType(propertyApiMeta?.schema);
+    let obj = getZObjByType(info as ApiParameterSchema);
 
     if (description) obj = obj?.describe?.(description);
 
@@ -42,39 +39,49 @@ export const convertInputSchemaToSchema = (inputSchema?: DwInputSchema, apiParam
     }
 
     schema[pKey] = obj;
+
   });
 
   return z.object(schema);
 
 };
 
-const initDataWorksTools = (dwTools: ActionTool[], dataWorksOpenApis: AlibabaCloudOpenApiInterface) => {
+/** 此方法是将 dw mcp 接口转成 action */
+const initDataWorksTools = (dwTools: ActionTool[], dwMcpRes?: DataWorksMCPResponse) => {
 
   const actionMap: { [name: string]: ActionTool } = {};
 
   try {
 
+    // DW 资源的白名单
+    const dwWhiteList: string[] = dwMcpRes?.result?.a2reslist || [];
+
     dwTools?.forEach?.((t) => {
       const apiKey = t?.name;
 
       // 先过滤掉几个，方便调式
-      // if(['ListProjects'].includes(apiKey)) return;
+      // if (!['CreateDataServiceApi'].includes(apiKey)) return;
 
       if (apiKey) {
 
         const map: ActionTool = { ...t };
 
         if (t?.inputSchema && !t?.schema) {
-          const apiMeta = dataWorksOpenApis?.apis?.[apiKey];
-          map.schema = convertInputSchemaToSchema(t?.inputSchema, apiMeta?.parameters);
+          const apiMeta = (Object.keys(t?.annotations?.pmd || {})?.map?.((apiKey) => (t?.annotations?.pmd?.[apiKey])) || []) as ApiParameter[];
+          map.schema = convertInputSchemaToSchema(t?.inputSchema, apiMeta);
         }
 
         if (!map?.handler) {
-          map.handler = getHandler(apiKey);
+          map.handler = getHandler(apiKey, t) as any;
         }
 
+        // 查看是否有对应的 MCP Resource
+        map.hasMcpResource = dwWhiteList?.includes?.(t?.name);
+
         actionMap[t?.name] = map;
+
       }
+
     });
 
     return actionMap;
