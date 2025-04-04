@@ -125,7 +125,7 @@ VERBOSE=export_more_logs_when_needed
 - ALIBABA_CLOUD_CREDENTIALS_URI: DataWorks 个人开发环境使用的认证方式，透过接口获取临时 AK，如果填了上面的 AK ID 与 AK Secret，就不用填这项。
 
 #### Optional
-- NODE_ENV: development 或 product，当设定为 development 时，DataWorks MCP Tool 列表接口会带上 pre- ，如此链接，Open API endpoint 会带上 pre-。
+- NODE_ENV: development 或 product，当设定为 development 时，DataWorks MCP Tool 列表接口会带上 pre- ，Open API endpoint 也会带上 pre-。
 - OPEN_API_ENDPOINT: 更改 Open API 打的 endpoint，如"dataworks.cn-shanghai.aliyuncs.com"。
 - TOOL_FILE_URI：DataWorks MCP Tool 列表的获取地址，可指定一个 http 地址，没有 http 开头的话就会读本地路径，如 "/Users/xxx/Documents/dev-tools.json"。
 - MCP_FILE_URI：DataWorks MCP 资源的获取地址，可指定一个 http 地址，没有 http 开头的话就会读本地路径，如 "/Users/xxx/Documents/mcp.json"。
