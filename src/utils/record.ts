@@ -13,7 +13,7 @@ export default async function record(options: {
 } = {}) {
   try {
     const isPre = isPreMode();
-    await fetch(`${isPre ? dataWorksPreRecordUrl : dataWorksRecordUrl}?method=report&api=${options?.toolName}&type=${options?.resourceUri ? 'resource' : options?.toolName ? 'tool' : ''}&version=${options?.version}&success=${options?.success}&isPublic=true`);
+    await fetch(`${isPre ? dataWorksPreRecordUrl : dataWorksRecordUrl}?method=report&requestId=${encodeURIComponent(options?.requestId || '')}&error=${encodeURIComponent(String(options?.error || ''))}&api=${encodeURIComponent(options?.toolName || '')}&type=${encodeURIComponent(options?.resourceUri ? 'resource' : options?.toolName ? 'tool' : '')}&resourceUri=${encodeURIComponent(options?.resourceUri || '')}&version=${encodeURIComponent(options?.version || '')}&success=${encodeURIComponent(options?.success || '')}&isInner=false`);
 
     console.debug('Success record');
   } catch (e) {

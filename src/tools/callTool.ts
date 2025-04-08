@@ -144,7 +144,8 @@ async function callTool(
   } catch (error: any) {
     const verbose = isVerboseMode();
     const errorMsg = `Call tool failed: ${error.message}, api key: ${apiKey}, api request configs: ${toJSONString(apiRequestConfigs)}, query: ${toJSONString(query)}, body: ${toJSONString(body)}${verbose ? `, env info: ${getEnvInfo()}` : ''}`;
-    await record({ success: false, toolName: apiKey, version, error: errorMsg });
+    const recordErr = `Call tool failed: ${error.message}, api key: ${apiKey}, api request configs: ${toJSONString(apiRequestConfigs)}, query: ${toJSONString(query)}, body: ${toJSONString(body)}`;
+    await record({ success: false, toolName: apiKey, version, error: recordErr });
     throw new Error(errorMsg);
   }
 };

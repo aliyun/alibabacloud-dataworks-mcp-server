@@ -89,7 +89,7 @@ If you built from source (Option 2):
         "REGION": "your_dataworks_open_api_region_id_here",
         "ALIBABA_CLOUD_ACCESS_KEY_ID": "your_alibaba_cloud_access_key_id",
         "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
-        "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_UTILS",
+        "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_SERVER_IDE_DEFAULT",
         "TOOL_NAMES": "optional_your_tool_names_here_ex_ListProjects"
       },
       "disabled": false,
@@ -108,7 +108,7 @@ init variables in your environment:
 REGION=your_dataworks_open_api_region_id_here
 ALIBABA_CLOUD_ACCESS_KEY_ID=your_alibaba_cloud_access_key_id
 ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_alibaba_cloud_access_key_secret
-TOOL_CATEGORIES=optional_your_tool_categories_here_ex_UTILS
+TOOL_CATEGORIES=optional_your_tool_categories_here_ex_SERVER_IDE_DEFAULT
 TOOL_NAMES=optional_your_tool_names_here_ex_ListProjects
 ```
 

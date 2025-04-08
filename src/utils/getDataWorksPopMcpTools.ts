@@ -15,29 +15,37 @@ export default async function getDataWorksPopMcpTools(options?: { categories?: s
       // local file
       const fileContent = fs.readFileSync(toolFileUri, 'utf8');
       dataWorksPopMcpTools = parseJSONString(fileContent);
+
+      // 如果有传入 categories 只挑有列的
+      const categories = (options?.categories || process.env?.TOOL_CATEGORIES?.split?.(',')) || [];
+      if (categories?.length) {
+        dataWorksPopMcpTools = dataWorksPopMcpTools.filter((item) => {
+          return categories?.includes(item?.annotations?.category || '');
+        });
+      }
+
+      // 如果有传入 names 只挑有列的
+      const names = (options?.names || process.env?.TOOL_NAMES?.split?.(',')) || [];
+      if (names?.length) {
+        dataWorksPopMcpTools = dataWorksPopMcpTools.filter((item) => {
+          return names?.includes(item?.name || '');
+        });
+      }
+
     } else {
       // http file
-      const queryRes = await fetch(toolFileUri);
+
+      // 接口过滤
+      const categories = (options?.categories?.join?.(',') || process.env?.TOOL_CATEGORIES) || '';
+      const names = (options?.names?.join?.(',') || process.env?.TOOL_NAMES) || '';
+      let _params = '';
+      if (categories) _params += `categories=${encodeURIComponent(categories)}`;
+      if (names) _params += `${_params ? '&' : ''}names=${encodeURIComponent(names)}`;
+      if (_params) _params = `?${_params}`;
+      const queryRes = await fetch(`${toolFileUri}${_params}`);
       const queryResStr = await queryRes.text() as string;
       dataWorksPopMcpTools = parseJSONString(queryResStr) as ActionTool[];
     }
-
-    // 如果有传入 categories 只挑有列的
-    const categories = (options?.categories || process.env?.TOOL_CATEGORIES?.split?.(',')) || [];
-    if (categories?.length) {
-      dataWorksPopMcpTools = dataWorksPopMcpTools.filter((item) => {
-        return categories?.includes(item?.annotations?.category || '');
-      });
-    }
-
-    // 如果有传入 names 只挑有列的
-    const names = (options?.names || process.env?.TOOL_NAMES?.split?.(',')) || [];
-    if (names?.length) {
-      dataWorksPopMcpTools = dataWorksPopMcpTools.filter((item) => {
-        return names?.includes(item?.name || '');
-      });
-    }
-
   } catch (e) {
     console.error('Failed to get dataWorksPopMcpTools:', e);
   }

@@ -62,6 +62,7 @@ async function main() {
         },
         tools: {},
       },
+      instructions: 'Operating with DataWorks Open APIs',
     };
 
     // https://spec.modelcontextprotocol.io/specification/2024-11-05/server/utilities/logging/
@@ -71,6 +72,8 @@ async function main() {
         logFile: process.env.LOG_FILE,
       };
     }
+
+    console.log('dataworks-mcp starting...');
 
     // Start the MCP server with error handling
     const serverWrapper = await startMcpServer(mcpActions, agent, {
