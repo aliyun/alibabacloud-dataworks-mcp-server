@@ -129,8 +129,8 @@ VERBOSE=export_more_logs_when_needed
 - OPEN_API_ENDPOINT: 更改 Open API 打的 endpoint，如"dataworks.cn-shanghai.aliyuncs.com"。
 - TOOL_FILE_URI：DataWorks MCP Tool 列表的获取地址，可指定一个 http 地址，没有 http 开头的话就会读本地路径，如 "/Users/xxx/Documents/dev-tools.json"。
 - MCP_FILE_URI：DataWorks MCP 资源的获取地址，可指定一个 http 地址，没有 http 开头的话就会读本地路径，如 "/Users/xxx/Documents/mcp.json"。
-- TOOL_CATEGORIES: Tool 分类的白名单，这边写 Open API 的分类，在此接口查看 Category，可多选，透过半符逗号分开，如 空间管理,运维中心,数据开发（新版）,UTILS。
-- TOOL_NAMES: Tool 名字的白名单，这边写 Open API 的名字，可多选，透过半符逗号分开，如 CreateNode,UpdateNode。
+- TOOL_CATEGORIES: Tool 分类的白名单，这边写 Open API 的分类，可多选，透过半符逗号分开，如 空间管理,数据源,数据集成,运维中心,数据开发（新版）,UTILS。
+- TOOL_NAMES: Tool 名字的白名单，这边写 Open API 的名字，可多选，透过半符逗号分开，如 ListProjects,CreateNode,UpdateNode。
 - VERBOSE: true 或 false，当 API 报错时，会打印出环境变量。
 
 ## Project Structure
