@@ -68,7 +68,8 @@ If you installed via npm (Option 1):
         "REGION": "your_dataworks_open_api_region_id_here",
         "ALIBABA_CLOUD_ACCESS_KEY_ID": "your_alibaba_cloud_access_key_id",
         "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
-        "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_UTILS"
+        "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_UTILS",
+        "TOOL_NAMES": "optional_your_tool_names_here_ex_ListProjects"
       },
       "disabled": false,
       "autoApprove": []
@@ -89,10 +90,7 @@ If you built from source (Option 2):
         "ALIBABA_CLOUD_ACCESS_KEY_ID": "your_alibaba_cloud_access_key_id",
         "ALIBABA_CLOUD_ACCESS_KEY_SECRET": "your_alibaba_cloud_access_key_secret",
         "TOOL_CATEGORIES": "optional_your_tool_categories_here_ex_UTILS",
-        "NODE_ENV": "optional_development_or_product",
-        "TOOL_FILE_URI":"if_NODE_ENV_is_development_then_the_tool_path_to_the_tool_file_uri",
-        "OPEN_API_ENDPOINT": "open_api_endpoint_here",
-        "VERBOSE": "export_more_logs_when_needed"
+        "TOOL_NAMES": "optional_your_tool_names_here_ex_ListProjects"
       },
       "disabled": false,
       "autoApprove": []
@@ -109,7 +107,7 @@ init variables in your environment:
 # DataWorks Configuration
 REGION=your_dataworks_open_api_region_id_here
 ALIBABA_CLOUD_ACCESS_KEY_ID=your_alibaba_cloud_access_key_id
-ALIBABA_CLOUD_ACCESS_KEY_SECRET＝your_alibaba_cloud_access_key_secret
+ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_alibaba_cloud_access_key_secret
 TOOL_CATEGORIES=optional_your_tool_categories_here_ex_UTILS
 TOOL_NAMES=optional_your_tool_names_here_ex_ListProjects
 ```
