@@ -48,7 +48,7 @@ export function createMcpServer(
 
     // 如果有对应的 MCP Resource，需要放在 description 给模型提示
     if (action.hasMcpResource) {
-      actionDescription += `\n*此Tool有MCP Resource，请查看${getMcpResourceName({ toolName: action.name })}(MCP Resource)获取更多使用此Tool的示例详情。`;
+      actionDescription += `\n*This Tool has a 'MCP Resource'，please request ${getMcpResourceName({ toolName: action.name })}(MCP Resource) to get more examples for using this tool.`;
     }
 
     serverWrapper.tool(
