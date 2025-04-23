@@ -1,8 +1,57 @@
-import { getHandler, getZObjByType } from '../actions/genAction.js';
+import { getHandler } from '../actions/index.js';
 import { ActionTool, DwInputSchema } from '../types/action.js';
 import { z } from "zod";
-import { ApiParameter, ApiParameterSchema } from '../types/apibabaCloudApi.js';
+import { ApiParameter, ApiParameterSchema } from '../types/alibabaCloudApi.js';
 import { DataWorksMCPResponse } from '../types/common.js';
+
+export const getZObjByType = (item?: ApiParameterSchema) => {
+
+  let obj: any;
+
+  const type = item?.type?.toLocaleLowerCase?.();
+
+  if (type?.includes?.('int')) {
+    // obj = z.bigint();
+    obj = z.number();
+  } if (type?.includes?.('double') || type?.includes?.('float')) {
+    obj = z.number();
+  } else if (type?.includes?.('string')) {
+    obj = z.string();
+  } else if (type?.includes?.('boolean')) {
+    obj = z.boolean();
+  } else if (type?.includes?.('date')) {
+    obj = z.date();
+  } else if (type?.includes?.('array')) {
+    if (item?.items) {
+      const childrenObjType = getZObjByType(item.items);
+      obj = z.array(childrenObjType);
+    } else obj = z.any();
+  } else if (type?.includes?.('object')) {
+
+    if (item?.properties) {
+      const schema: { [name: string]: any } = {};
+      Object.keys(item?.properties || {})?.forEach?.((paramName) => {
+        const param = item?.properties?.[paramName];
+        if (paramName) {
+          let obj = getZObjByType(param);
+          if (param?.description) obj = obj?.describe?.(param?.description);
+          if (param?.required === false) {
+            obj = obj?.optional?.();
+            // 有 bug 需要执行两次
+            if (obj?.optional) obj = obj?.optional?.();
+          }
+          schema[paramName] = obj;
+        }
+      });
+      obj = z.object(schema);
+    } else obj = z.any();
+
+  } else {
+    obj = z.any();
+  }
+
+  return obj;
+}
 
 export const convertInputSchemaToSchema = (inputSchema?: DwInputSchema, apiParameters?: ApiParameter[]) => {
   const schema: { [name: string]: any } = {};
@@ -59,7 +108,7 @@ const initDataWorksTools = (dwTools: ActionTool[], dwMcpRes?: DataWorksMCPRespon
     dwTools?.forEach?.((t) => {
       const apiKey = t?.name;
 
-      // 先过滤掉几个，方便调式
+      // 先过滤掉几个，方便调试
       // if (!['CreateDataServiceApi'].includes(apiKey)) return;
 
       if (apiKey) {

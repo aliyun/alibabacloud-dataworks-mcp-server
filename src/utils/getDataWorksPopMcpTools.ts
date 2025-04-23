@@ -7,7 +7,7 @@ import { dataWorksPopMcpToolsUrl, dataWorksPrePopMcpToolsUrl } from '../constant
 export default async function getDataWorksPopMcpTools(options?: { categories?: string[]; names?: string[]; }) {
   const isPre = isPreMode();
   // 如果是预发环境，支持本地文件
-  const toolFileUri = isPre ? process.env.TOOL_FILE_URI ? process.env.TOOL_FILE_URI : dataWorksPrePopMcpToolsUrl : dataWorksPopMcpToolsUrl;
+  const toolFileUri = process.env.TOOL_FILE_URI || (isPre ? dataWorksPrePopMcpToolsUrl : dataWorksPopMcpToolsUrl);
 
   let dataWorksPopMcpTools: ActionTool[] = [];
   try {

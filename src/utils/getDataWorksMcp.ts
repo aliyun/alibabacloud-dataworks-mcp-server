@@ -9,7 +9,7 @@ export default async function getDataWorksMcp(options?: {}) {
   const isPre = isPreMode();
 
   // 如果是预发环境，支持本地文件
-  const fileUri = isPre ? process.env.MCP_FILE_URI ? process.env.MCP_FILE_URI : dataWorksPreMcpUrl : dataWorksMcpUrl;
+  const fileUri = process.env.MCP_FILE_URI || (isPre ? dataWorksPreMcpUrl : dataWorksMcpUrl);
 
   let dwMcpRes;
   try {

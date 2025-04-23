@@ -35,12 +35,7 @@ async function main() {
     // Initialize the agent with error handling
     const agent = await OpenApiClient.createClient();
 
-    // method 1: 请求所有 dataworks open api json
-    // const queryOpenApisRes = await fetch(dataWorksAliyunAllOpenApiUrl);
-    // const dataWorksOpenApis = await queryOpenApisRes.json() as unknown as AlibabaCloudOpenApiInterface;
-    // const mcpActions = transferAlibabaCloudOpenApisToActions(dataWorksOpenApis);
-
-    // method 2: 请求 dataworks mcp tools json
+    // 请求 dataworks mcp tools json
     const dataWorksPopMcpTools: ActionTool[] = await getDataWorksPopMcpTools();
 
     // 请求 dataworks mcp resources

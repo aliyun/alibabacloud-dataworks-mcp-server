@@ -10,7 +10,7 @@ import isNumber from 'lodash/isNumber.js';
 import isString from 'lodash/isString.js';
 import isObject from 'lodash/isObject.js';
 import { OpenApiClientInstance } from "../openApiClient/index.js";
-import { IAlibabaCloudOpenApiJsonResponse, OpenApiConfigs } from '../types/apibabaCloudApi.js';
+import { IAlibabaCloudOpenApiJsonResponse, OpenApiConfigs } from '../types/alibabaCloudApi.js';
 import { ActionTool } from '../types/action.js';
 import { isEmptyStr, isVerboseMode, getEnvInfo, toJSONString, parseJSONString, isBigNumber } from '../utils/common.js';
 

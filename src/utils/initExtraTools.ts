@@ -1,6 +1,6 @@
 
-import convertTimestamps from '../tools/agent/convertTimestamps.js';
-import toTimestamps from '../tools/agent/toTimestamps.js';
+import convertTimestamps from '../tools/utils/convertTimestamps.js';
+import toTimestamps from '../tools/utils/toTimestamps.js';
 import { ActionTool } from '../types/action.js';
 import { convertInputSchemaToSchema } from './initDataWorksTools.js';
 

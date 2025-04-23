@@ -1,6 +1,6 @@
 import { OpenApiClientInstance } from "../openApiClient/index.js";
 import { z } from "zod";
-import { ApiMethodUpperCase, ApiParameter, ApiParameterSchema } from "./apibabaCloudApi.js";
+import { ApiMethodUpperCase, ApiParameter, ApiParameterSchema } from "./alibabaCloudApi.js";
 
 /**
  * Example of an action with input and output
