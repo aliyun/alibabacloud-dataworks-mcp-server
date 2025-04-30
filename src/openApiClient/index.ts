@@ -55,6 +55,7 @@ class OpenApiClient {
     const endpoint = process.env.OPEN_API_ENDPOINT || (`dataworks${isPre ? '-pre' : ''}.${regionId ? `${regionId}.` : ''}aliyuncs.com`);
     apiConfig.endpoint = endpoint;
 
+    // timeout 设定 https://github.com/aliyun/credentials-nodejs/blob/0bd0925b18e0cb831a3bc824d5f87a51e688e452/src/providers/uri.ts#L77
 
     // 使用特定方式调用
     // import DataWorksPublic20240518 from '@alicloud/dataworks-public20240518';
