@@ -126,7 +126,11 @@ async function callTool(
     if (['GET', 'DELETE'].includes(method || '')) body = null;
 
     const request = new OpenApi.OpenApiRequest({ query, body });
-    const runtime = new Util.RuntimeOptions({});
+    // runtime default settings https://github.com/aliyun/tea-util/blob/5f4bdebef3b57d33207b6bc44af6ed5e1a009959/ts/test/client.spec.ts#L133
+    const runtime = new Util.RuntimeOptions({
+      readTimeout: process.env.OPEN_API_READ_TIMEOUT ? Number(process.env.OPEN_API_READ_TIMEOUT) : 10000,
+      connectTimeout: process.env.OPEN_API_CONNECT_TIMEOUT ? Number(process.env.OPEN_API_CONNECT_TIMEOUT) : 10000,
+    });
     // 查看 https://github.com/aliyun/darabonba-openapi/blob/master/ts/src/client.ts
     const res = await (agent as any)?.callApi?.(apiRequestConfigs, request, runtime);
     let result: IAlibabaCloudOpenApiJsonResponse['body'] | null = null;
