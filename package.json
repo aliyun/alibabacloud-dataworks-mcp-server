@@ -45,7 +45,7 @@
     "@alicloud/tea-typescript": "^1.8.0",
     "@alicloud/tea-util": "^1.4.10",
     "@modelcontextprotocol/sdk": "^1.5.0",
-    "@modelcontextprotocol/server-filesystem": "2025.3.28",
+    "@modelcontextprotocol/server-filesystem": "2025.7.1",
     "bignumber.js": "^9.1.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
