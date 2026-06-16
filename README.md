@@ -1,8 +1,24 @@
 [![MseeP.ai Security Assessment Badge](https://mseep.net/mseep-audited.png)](https://mseep.ai/app/aliyun-alibabacloud-dataworks-mcp-server)
 
+# Try DataWorks Agent
+
+Want a ready-to-use AI experience for DataWorks without manual MCP setup?
+
+**[DataWorks Agent](https://dataworks.data.alibabacloud.com/product/agent)** is Alibaba Cloud's built-in intelligent assistant for data development and operations. It connects to your DataWorks workspace out of the box, so you can use natural language to explore metadata, develop nodes, troubleshoot tasks, and manage resources—no local MCP server configuration required.
+
+| | DataWorks Agent | This MCP Server |
+|---|---|---|
+| **Best for** | Quick start in the DataWorks console | Custom AI clients (Cursor, Cline, etc.) |
+| **Setup** | Open and use in browser | Install, configure AK, and connect MCP |
+| **Integration** | Native DataWorks experience | Open API via MCP protocol |
+
+👉 **Get started:** [https://dataworks.data.alibabacloud.com/product/agent](https://dataworks.data.alibabacloud.com/product/agent)
+
 # DataWorks MCP Server
 
 A Model Context Protocol (MCP) server that provides tools for AI, allowing it to interact with the DataWorks Open API through a standardized interface. This implementation is based on the Aliyun Open API and enables AI agents to perform cloud resources operations seamlessly.
+
+If you prefer embedding DataWorks capabilities into your own AI workflow or IDE, follow the installation guide below.
 
 ## Overview
 
