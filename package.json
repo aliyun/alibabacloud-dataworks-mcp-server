@@ -12,6 +12,8 @@
   "scripts": {
     "build": "tsc && node -e \"require('fs').chmodSync('build/index.js', '755')\"",
     "test": "npm run build && node --test scripts/verify-sdk8-id-migration.test.mjs",
+    "githooks:install": "sh scripts/install-githooks.sh",
+    "prepare": "sh scripts/install-githooks.sh",
     "start": "pnpm run build; REGION=cn-shanghai node build/index.js",
     "dev": "pnpm run build; npx @modelcontextprotocol/inspector -e NODE_ENV=development -e REGION=cn-shanghai -e ALIBABA_CLOUD_ACCESS_KEY_ID=your_aliyun_key_id -e ALIBABA_CLOUD_ACCESS_KEY_SECRET=your_aliyun_key_secret node build/index.js",
     "restart": "pnpm run build; REGION=cn-shanghai node build/index.js",

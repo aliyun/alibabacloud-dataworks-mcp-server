@@ -1,0 +1,52 @@
+#!/bin/sh
+set -eu
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT"
+
+STAGED_FILES="$(git diff --cached --name-only --diff-filter=ACM || true)"
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+echo "[pre-commit] Scanning staged files for secrets..."
+
+FOUND=0
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+  [ -f "$file" ] || continue
+
+  case "$file" in
+    *.png|*.jpg|*.jpeg|*.gif|*.ico|*.woff|*.woff2|package-lock.json|pnpm-lock.yaml)
+      continue
+      ;;
+  esac
+
+  if grep -nE 'LTAI[0-9A-Za-z]{10,}' "$file" 2>/dev/null | grep -viE 'your_|example|xxxx|\*\*\*' >/tmp/pre-commit-secret-hits.$$; then
+    echo "ERROR: Possible Alibaba Cloud AccessKey ID in $file"
+    sed 's/^/  /' /tmp/pre-commit-secret-hits.$$
+    FOUND=1
+  fi
+
+  if grep -nE "(access[_-]?key[_-]?secret|secret[_-]?key)\s*[:=]\s*['\"][^'\"]{20,}['\"]" "$file" 2>/dev/null \
+    | grep -viE 'your_|example|xxxx|\*\*\*|placeholder|changeme' >/tmp/pre-commit-secret-hits.$$; then
+    echo "ERROR: Possible secret key assignment in $file"
+    sed 's/^/  /' /tmp/pre-commit-secret-hits.$$
+    FOUND=1
+  fi
+done <<EOF
+$STAGED_FILES
+EOF
+
+rm -f /tmp/pre-commit-secret-hits.$$
+
+if [ "$FOUND" -ne 0 ]; then
+  echo
+  echo "Commit blocked: remove credentials and use environment variables instead."
+  exit 1
+fi
+
+echo "[pre-commit] Running build..."
+npm run build --silent
+
+echo "[pre-commit] OK"
