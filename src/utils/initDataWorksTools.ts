@@ -3,17 +3,21 @@ import { ActionTool, DwInputSchema } from '../types/action.js';
 import { z } from "zod";
 import { ApiParameter, ApiParameterSchema } from '../types/alibabaCloudApi.js';
 import { DataWorksMCPResponse } from '../types/common.js';
+import { shouldUseStringIdType } from './stringIdFields.js';
 
-export const getZObjByType = (item?: ApiParameterSchema) => {
+export const getZObjByType = (item?: ApiParameterSchema, paramName?: string) => {
 
   let obj: any;
 
   const type = item?.type?.toLocaleLowerCase?.();
 
   if (type?.includes?.('int')) {
-    // obj = z.bigint();
-    obj = z.number();
-  } if (type?.includes?.('double') || type?.includes?.('float')) {
+    if (shouldUseStringIdType(paramName, item?.format)) {
+      obj = z.union([z.string(), z.number()]).transform((v) => String(v));
+    } else {
+      obj = z.number();
+    }
+  } else if (type?.includes?.('double') || type?.includes?.('float')) {
     obj = z.number();
   } else if (type?.includes?.('string')) {
     obj = z.string();
@@ -30,17 +34,17 @@ export const getZObjByType = (item?: ApiParameterSchema) => {
 
     if (item?.properties) {
       const schema: { [name: string]: any } = {};
-      Object.keys(item?.properties || {})?.forEach?.((paramName) => {
-        const param = item?.properties?.[paramName];
-        if (paramName) {
-          let obj = getZObjByType(param);
+      Object.keys(item?.properties || {})?.forEach?.((propertyName) => {
+        const param = item?.properties?.[propertyName];
+        if (propertyName) {
+          let obj = getZObjByType(param, propertyName);
           if (param?.description) obj = obj?.describe?.(param?.description);
           if (param?.required === false) {
             obj = obj?.optional?.();
             // 有 bug 需要执行两次
             if (obj?.optional) obj = obj?.optional?.();
           }
-          schema[paramName] = obj;
+          schema[propertyName] = obj;
         }
       });
       obj = z.object(schema);
@@ -77,7 +81,7 @@ export const convertInputSchemaToSchema = (inputSchema?: DwInputSchema, apiParam
     const info = inputSchema?.properties?.[pKey];
     const description = info?.description;
 
-    let obj = getZObjByType(info as ApiParameterSchema);
+    let obj = getZObjByType(info as ApiParameterSchema, pKey);
 
     if (description) obj = obj?.describe?.(description);
 

@@ -12,7 +12,8 @@ import isObject from 'lodash/isObject.js';
 import { OpenApiClientInstance } from "../openApiClient/index.js";
 import { IAlibabaCloudOpenApiJsonResponse, OpenApiConfigs } from '../types/alibabaCloudApi.js';
 import { ActionTool } from '../types/action.js';
-import { isEmptyStr, isVerboseMode, getEnvInfo, toJSONString, parseJSONString, isBigNumber } from '../utils/common.js';
+import { isEmptyStr, isVerboseMode, getEnvInfo, toJSONString, parseJSONString } from '../utils/common.js';
+import { normalizeInputStringIds } from '../utils/stringIdFields.js';
 
 /**
  * Get detailed and latest information about any topic using Perplexity AI.
@@ -58,8 +59,8 @@ async function callTool(
     let hasInByteParams = false;
     let hasInFormDataParams = false;
 
-    // 需要重新 assign 下
-    const _input: any = { ...input };
+    // Normalize id fields for DataWorks OpenAPI SDK 8.0.0+ (Long -> String).
+    const _input: any = normalizeInputStringIds({ ...input });
 
     Object.keys(_input)?.forEach((key) => {
       let value = _input[key];
