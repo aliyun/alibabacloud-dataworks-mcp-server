@@ -4,7 +4,7 @@
 
 Want a ready-to-use AI experience for DataWorks without manual MCP setup?
 
-**[DataWorks Agent](https://dataworks.data.alibabacloud.com/product/agent)** is Alibaba Cloud's built-in intelligent assistant for data development and operations. It connects to your DataWorks workspace out of the box, so you can use natural language to explore metadata, develop nodes, troubleshoot tasks, and manage resources—no local MCP server configuration required.
+**[DataWorks Agent](https://dataworks.data.alibabacloud.com/product/agent?source=github)** is Alibaba Cloud's built-in intelligent assistant for data development and operations. It connects to your DataWorks workspace out of the box, so you can use natural language to explore metadata, develop nodes, troubleshoot tasks, and manage resources—no local MCP server configuration required.
 
 | | DataWorks Agent | This MCP Server |
 |---|---|---|
@@ -12,7 +12,7 @@ Want a ready-to-use AI experience for DataWorks without manual MCP setup?
 | **Setup** | Open and use in browser | Install, configure AK, and connect MCP |
 | **Integration** | Native DataWorks experience | Open API via MCP protocol |
 
-👉 **Get started:** [https://dataworks.data.alibabacloud.com/product/agent](https://dataworks.data.alibabacloud.com/product/agent)
+👉 **Get started:** [https://dataworks.data.alibabacloud.com/product/agent?source=github](https://dataworks.data.alibabacloud.com/product/agent?source=github)
 
 # DataWorks MCP Server
 
